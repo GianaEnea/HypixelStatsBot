@@ -21,13 +21,32 @@ while True:
                 user_id = updates[-1]['message']['from']['id']
                 lastUpdateId = updates[-1]['update_id'] + 1
                 # avvio del bot
-                if 'text' != "":
+                if updates[-1]['message']['text'] != "/start":
                     data = bot.getadata(text)
-                    playerKarma= str(data['player']['karma'])
-                    playerData = str(data['player'])
-                    bot.sendMessage(chat_id, "karma del giocatore: "+text+" è pari a: "+playerKarma)
+                    try:
+                        playerKarma = str(data['player']['karma'])
+                    except:
+                        playerKarma = "karma non trovato "
+                    try:
+                        bwEXP = str(data['player']['stats']['Bedwars']['Experience'])
+                    except:
+                        bwEXP = "bwEXP non trovata"
+                    try:
+                        dbwinstreak = str(data['player']['stats']['Bedwars']['winstreak'])
+                    except:
+                        dbwinstreak = "dbwinstreak non trovata"
+                    try:
+                        playerSocial = str(data['player']['socialMedia']['links']['YOUTUBE'])
+                    except:
+                        playerSocial = "social non trovati"
+
+                    messaggio= "karma del giocatore: "+text+" è pari a: " + playerKarma +", \r\n bed wars EXP: "+ bwEXP +", \r\n bed wars winstreak: "+ dbwinstreak + " \r\n Social: "+ playerSocial
+                    bot.sendMessage(chat_id, messaggio)
+                else:
+                    messaggio = "ciao, scrivimi il nome del player di cui vuoi sapere i dati"
+                    bot.sendMessage(chat_id, messaggio)
+
 
         time.sleep(5)
 
-        # L'api key scadrà il: 03/06/2024
-        # Lapi non permette di eseguire ricerche sullo stesso giocatore in un intervallo di tempo troppo breve
+        
